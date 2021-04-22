@@ -12,6 +12,7 @@ import 'package:sexual_app/models/retrofit/responses/orientation_sexual_response
 import 'package:sexual_app/models/retrofit/responses/religion_response.dart';
 import 'package:sexual_app/services/api_services.dart';
 
+// ignore: must_be_immutable
 class RegisterWidget extends StatefulWidget {
   List<ResponseReligionModel> religion;
   List<ResponseOrientationSexualModel> sexual;

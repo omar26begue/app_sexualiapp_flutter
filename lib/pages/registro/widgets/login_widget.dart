@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
+import 'package:sexual_app/helpers/dialog.dart';
+import 'package:sexual_app/helpers/email.dart';
+import 'package:sexual_app/helpers/response.dart';
+import 'package:sexual_app/models/retrofit/requests/login_request.dart';
+import 'package:sexual_app/services/api_services.dart';
 
 class LoginWidget extends StatefulWidget {
   LoginWidget({Key key}) : super(key: key);
@@ -14,6 +21,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   bool loading = false;
   TextEditingController _emailLogin = new TextEditingController();
   TextEditingController _passwordLogin = new TextEditingController();
+  var logger = new Logger();
 
   @override
   void initState() {
@@ -134,25 +142,69 @@ class _LoginWidgetState extends State<LoginWidget> {
             ],
           ),
           SizedBox(height: 24.0),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: HexColor('#6F33C7'),
-              borderRadius: BorderRadius.all(Radius.circular(35.0)),
-            ),
-            padding: EdgeInsets.symmetric(vertical: 15.0),
-            child: Text(
-              'Iniciar sessión',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Gibson SemiBlod',
-                fontSize: 15.0,
-                color: Colors.white,
-              ),
-            ),
+          InkWell(
+            onTap: () => actionLogin(),
+            child: loading == false
+                ? Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: HexColor('#6F33C7'),
+                      borderRadius: BorderRadius.all(Radius.circular(35.0)),
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 15.0),
+                    child: Text(
+                      'Iniciar sessión',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'Gibson SemiBlod',
+                        fontSize: 15.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                : Center(child: CircularProgressIndicator()),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> actionLogin() async {
+    try {
+      FocusScope.of(context).requestFocus(new FocusNode());
+
+      String texto = '';
+      if (_emailLogin.text.isEmpty)
+        texto = 'Correo electrónico es un campo requerido';
+      else if (_emailLogin.text.isNotEmpty) {
+        if (ValidateSexualidad.validateEmail(_emailLogin.text) == false) texto = 'Dirección de correo electrónico incorrecta';
+      } else if (_passwordLogin.text.isEmpty)
+        texto = 'Contraseña es un campo requerido';
+      else if (_passwordLogin.text.isNotEmpty) {
+        if (_passwordLogin.text.length > 5) texto = 'Contraseña demasiado corta';
+      }
+
+      if (texto.length == 0) {
+        setState(() => loading = true);
+        RequestLoginModel login = new RequestLoginModel(email: _emailLogin.text, password: _passwordLogin.text);
+        final response = await Provider.of<APISexualidadServices>(context, listen: false).loginUsers(login);
+        setState(() => loading = false);
+
+        Response.responseMedical(
+          context: context,
+          statusCode: response.statusCode,
+          logger: logger,
+          functionCode: () {},
+          error: response.error,
+          executeError: () {},
+        );
+      } else {
+        DialogSexualidad.showCupertinoDialogError(context: context, title: 'Registro de usuario', texto: texto);
+      }
+    } catch (e) {
+      setState(() => loading = false);
+      logger.e(e.toString());
+      setState(() => loading = false);
+    }
   }
 }
