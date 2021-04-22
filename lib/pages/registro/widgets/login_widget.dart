@@ -102,6 +102,7 @@ class _LoginWidgetState extends State<LoginWidget> {
               child: TextFormField(
                 enabled: !loading,
                 controller: _passwordLogin,
+                obscureText: true,
                 onFieldSubmitted: (v) {
                   //FocusScope.of(context).requestFocus(_focusContrasena);
                 },
