@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:sexual_app/helpers/dialog.dart';
+import 'package:sexual_app/helpers/email.dart';
 import 'package:sexual_app/helpers/response.dart';
+import 'package:sexual_app/models/providers/model_sexual.dart';
 import 'package:sexual_app/models/retrofit/requests/register_request.dart';
 import 'package:sexual_app/models/retrofit/responses/orientation_sexual_response.dart';
 import 'package:sexual_app/models/retrofit/responses/religion_response.dart';
@@ -12,8 +15,9 @@ import 'package:sexual_app/services/api_services.dart';
 class RegisterWidget extends StatefulWidget {
   List<ResponseReligionModel> religion;
   List<ResponseOrientationSexualModel> sexual;
+  Function actionChangeTab;
 
-  RegisterWidget({Key key, @required this.religion, @required this.sexual}) : super(key: key);
+  RegisterWidget({Key key, @required this.religion, @required this.sexual, @required this.actionChangeTab}) : super(key: key);
 
   @override
   _RegisterWidgetState createState() {
@@ -310,6 +314,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 fontSize: 15.0,
                 color: Colors.white10,
               ),
+              onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
               onChanged: (String value) => setState(() => _itemSex = value),
               isExpanded: true,
             ),
@@ -346,6 +351,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 fontSize: 15.0,
                 color: Colors.white10,
               ),
+              onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
               onChanged: (ResponseReligionModel value) => setState(() => _itemReligion = value),
               isExpanded: true,
             ),
@@ -382,6 +388,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 fontSize: 15.0,
                 color: Colors.white10,
               ),
+              onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
               onChanged: (ResponseOrientationSexualModel value) => setState(() => _itemSexual = value),
               isExpanded: true,
             ),
@@ -428,25 +435,61 @@ class _RegisterWidgetState extends State<RegisterWidget> {
 
   Future<void> actionRegister() async {
     try {
-      setState(() => loading = true);
-      RequestRegisterModel register = new RequestRegisterModel(
-        name: _nameRegister.text,
-        email: _emailRegister.text,
-        password: _passwordRegister.text,
-        age: int.parse(_ageRegister.text),
-        sex: _itemSex,
-        id_religion: _itemReligion.identifier,
-        sexual_orientation: _itemSexual.identifier,
-      );
-      final response = await Provider.of<APISexualidadServices>(context, listen: false).registerUsers(register);
-      setState(() => loading = false);
+      ModelSexualProvider model = ScopedModel.of(context);
+      FocusScope.of(context).requestFocus(new FocusNode());
 
-      Response.responseMedical(
-        context: context,
-        statusCode: response.statusCode,
-        logger: logger,
-        functionCode: () {},
-      );
+      String texto = '';
+      if (_nameRegister.text.length < 3)
+        texto = 'Nombre de usuario demasiado corto';
+      else if (ValidateSexualidad.validateEmail(_emailRegister.text) == false)
+        texto = 'Dirección de correo electrónico incorrecta';
+      else if (_passwordRegister.text.length <= 5)
+        texto = 'Contraseña demasiado corta';
+      else if (_ageRegister.text.isEmpty == true) {
+        texto = 'La edad mínima para su registro es de 13 años';
+      } else if (_ageRegister.text.isNotEmpty == true) {
+        if (int.parse(_ageRegister.text) < 13) texto = 'La edad mínima para su registro es de 13 años';
+      } else if (_itemSex == null)
+        texto = 'Debe seleccionar un sexo';
+      else if (_itemReligion == null)
+        texto = 'Debe seleccionar una religión para su registro';
+      else if (_itemSexual == null) texto = 'Debe seleccionar una orientación sexual';
+      if (texto.length > 0) {
+        texto += '. Por favor complete los datos para completar su registro en el sistema.';
+        DialogSexualidad.showCupertinoDialogError(context: context, title: 'Comprobación', texto: texto);
+      }
+
+      if (texto.length == 0) {
+        setState(() => loading = true);
+        RequestRegisterModel register = new RequestRegisterModel(
+          name: _nameRegister.text,
+          email: _emailRegister.text,
+          password: _passwordRegister.text,
+          age: int.parse(_ageRegister.text),
+          sex: _itemSex,
+          id_religion: _itemReligion.identifier,
+          sexual_orientation: _itemSexual.identifier,
+        );
+        final response = await Provider.of<APISexualidadServices>(context, listen: false).registerUsers(register);
+        setState(() => loading = false);
+
+        Response.responseMedical(
+          context: context,
+          statusCode: response.statusCode,
+          logger: logger,
+          functionCode: () {
+            DialogSexualidad.showCupertinoDialogSuccess(
+              context: context,
+              title: 'Registro',
+              texto: response.body.message,
+              btnAceptar: () {
+                Navigator.of(context).pop();
+                widget.actionChangeTab(model, 'login');
+              },
+            );
+          },
+        );
+      }
     } catch (e) {
       logger.e(e.toString());
       setState(() => loading = false);

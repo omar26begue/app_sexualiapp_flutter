@@ -184,6 +184,7 @@ class _LoginPageState extends State<LoginPage> {
                                       : RegisterWidget(
                                           religion: _listReligion,
                                           sexual: _listSexual,
+                                          actionChangeTab: actionChangeTab,
                                         )),
                             ],
                           ),
