@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:chopper/chopper.dart';
 import 'package:sexual_app/helpers/constants/api.dart';
+import 'package:sexual_app/models/retrofit/requests/facebook_request.dart';
 import 'package:sexual_app/models/retrofit/requests/login_request.dart';
 import 'package:sexual_app/models/retrofit/requests/register_request.dart';
 import 'package:sexual_app/models/retrofit/responses/login_response.dart';
@@ -23,6 +24,9 @@ abstract class APISexualidadServices extends ChopperService {
 
   @Post(headers: {'Content-Type': 'application/json'}, path: "/auth/register")
   Future<Response<ResponseAPIModel>> registerUsers(@Body() RequestRegisterModel register);
+
+  @Post(headers: {'Content-Type': 'application/json'}, path: "/auth/facebook")
+  Future<Response<ResponseLoginModel>> loginFacebook(@Body() RequestFacebookModel facebook);
 
   @Post(headers: {'Content-Type': 'application/json'}, path: "/auth/login")
   Future<Response<ResponseLoginModel>> loginUsers(@Body() RequestLoginModel login);
