@@ -24,6 +24,7 @@ dependencies:
   flutter_svg: ^0.19.3
   cached_network_image: ^2.5.0
   logger: ^1.0.0
+  # autentificacion facebook
   flutter_facebook_auth: ^3.3.2+2
   lottie: ^0.5.1
 

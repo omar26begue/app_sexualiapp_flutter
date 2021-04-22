@@ -4,6 +4,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:sexual_app/helpers/constants/routers.dart';
 import 'package:sexual_app/helpers/loading.dart';
 import 'package:sexual_app/helpers/response.dart';
 import 'package:sexual_app/models/providers/model_sexual.dart';
@@ -33,6 +34,9 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     loadReligion();
+
+    ModelSexualProvider model = ScopedModel.of(context);
+    setState(() => activo = model.getTabLogin);
   }
 
   @override
@@ -184,12 +188,15 @@ class _LoginPageState extends State<LoginPage> {
                                       : RegisterWidget(
                                           religion: _listReligion,
                                           sexual: _listSexual,
+                                          actionChangeTab: actionChangeTab,
                                         )),
                             ],
                           ),
                         ),
                       ],
                     ),
+                    Positioned(
+                        top: 40.0, left: 20.0, child: GestureDetector(onTap: () => actionInit(), child: Icon(Icons.arrow_back, color: Colors.white))),
                     ShowLoadingSexualidad(loading: isLoading),
                   ],
                 ),
@@ -203,5 +210,9 @@ class _LoginPageState extends State<LoginPage> {
 
   void actionChangeTab(ModelSexualProvider model, String tab) {
     model.setTabLogin(tab);
+  }
+
+  void actionInit() {
+    Navigator.pushReplacementNamed(context, pageEntrace);
   }
 }

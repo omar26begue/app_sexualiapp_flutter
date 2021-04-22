@@ -45,4 +45,25 @@ class _$APISexualidadServices extends APISexualidadServices {
         Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
     return client.send<ResponseAPIModel, ResponseAPIModel>($request);
   }
+
+  @override
+  Future<Response<ResponseLoginModel>> loginFacebook(
+      RequestFacebookModel facebook) {
+    final $url = '/api/auth/facebook';
+    final $headers = {'Content-Type': 'application/json'};
+    final $body = facebook;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<ResponseLoginModel, ResponseLoginModel>($request);
+  }
+
+  @override
+  Future<Response<ResponseLoginModel>> loginUsers(RequestLoginModel login) {
+    final $url = '/api/auth/login';
+    final $headers = {'Content-Type': 'application/json'};
+    final $body = login;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<ResponseLoginModel, ResponseLoginModel>($request);
+  }
 }
