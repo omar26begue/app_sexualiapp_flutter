@@ -2,7 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:sexual_app/helpers/constants/routers.dart';
+import 'package:sexual_app/models/providers/model_sexual.dart';
 
 class EntracePage extends StatefulWidget {
   EntracePage({Key key}) : super(key: key);
@@ -214,6 +216,9 @@ class _EntracePageState extends State<EntracePage> {
   }
 
   void actionRegister() {
+    ModelSexualProvider model = ScopedModel.of(context);
+    model.setTabLogin('register');
+
     Navigator.pushReplacementNamed(context, pageLogin);
   }
 }
