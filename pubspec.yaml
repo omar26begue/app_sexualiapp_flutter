@@ -27,6 +27,8 @@ dependencies:
   # autentificacion facebook
   flutter_facebook_auth: ^3.3.2+2
   lottie: ^0.5.1
+  intl: ^0.17.0
+  share: ^2.0.1
 
 dev_dependencies:
   flutter_test:
@@ -54,6 +56,14 @@ flutter:
     - family: Quicksand Regular
       fonts:
         - asset: assets/fonts/QUICKSAND-REGULAR.TTF
+
+    - family: Quicksand Blod
+      fonts:
+        - asset: assets/fonts/QUICKSAND-BOLD.TTF
+
+    - family: Gibson Regular
+      fonts:
+        - asset: assets/fonts/GIBSONREGULAR.OTF
 
     - family: Gibson Light
       fonts:

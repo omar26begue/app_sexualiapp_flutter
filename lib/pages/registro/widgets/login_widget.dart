@@ -205,7 +205,6 @@ class _LoginWidgetState extends State<LoginWidget> {
     } catch (e) {
       setState(() => loading = false);
       logger.e(e.toString());
-      setState(() => loading = false);
     }
   }
 }

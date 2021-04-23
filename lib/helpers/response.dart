@@ -36,7 +36,7 @@ class Response {
           title: 'Autentificación',
           texto: 'Lo sentimos no se encuentra autenticado en nuestra aplicación.',
           function: () {
-            SessionManagerSexualidad().clearPrefMedical();
+            SessionManagerSexualidad().clearPrefSexualidad();
             Navigator.of(context).pushReplacementNamed(pageEntrace);
           },
         );

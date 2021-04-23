@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:logger/logger.dart';
 import 'package:sexual_app/helpers/constants/routers.dart';
+import 'package:sexual_app/helpers/session_manager.dart';
 
 class SplashPage extends StatefulWidget {
   SplashPage({Key key}) : super(key: key);
@@ -15,6 +17,8 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  var logger = new Logger();
+
   @override
   void initState() {
     super.initState();
@@ -30,7 +34,15 @@ class _SplashPageState extends State<SplashPage> {
 
   void navigationHome() async {
     try {
-      Navigator.pushReplacementNamed(context, pageEntrace);
+      bool isLogin = await SessionManagerSexualidad().isLogginSexualidad();
+
+      if (isLogin == true) {
+        String token = await SessionManagerSexualidad().getToken();
+        logger.i(token);
+        Navigator.pushReplacementNamed(context, pageHome);
+      } else {
+        Navigator.pushReplacementNamed(context, pageEntrace);
+      }
     } catch (e) {
       Navigator.pushReplacementNamed(context, pageEntrace);
     }

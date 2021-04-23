@@ -5,6 +5,7 @@ import 'package:sexual_app/helpers/constants/api.dart';
 import 'package:sexual_app/models/retrofit/requests/facebook_request.dart';
 import 'package:sexual_app/models/retrofit/requests/login_request.dart';
 import 'package:sexual_app/models/retrofit/requests/register_request.dart';
+import 'package:sexual_app/models/retrofit/responses/articles_response.dart';
 import 'package:sexual_app/models/retrofit/responses/login_response.dart';
 import 'package:sexual_app/models/retrofit/responses/orientation_sexual_response.dart';
 import 'package:sexual_app/models/retrofit/responses/religion_response.dart';
@@ -31,6 +32,9 @@ abstract class APISexualidadServices extends ChopperService {
   @Post(headers: {'Content-Type': 'application/json'}, path: "/auth/login")
   Future<Response<ResponseLoginModel>> loginUsers(@Body() RequestLoginModel login);
 
+  @Get(headers: {'Content-Type': 'application/json'}, path: "/v1/articles")
+  Future<Response<List<ResponseArticlesModel>>> getArticles(@Header("Authorization") String token);
+
   static APISexualidadServices create() {
     final client = ChopperClient(
       baseUrl: APIProduction,
@@ -40,6 +44,7 @@ abstract class APISexualidadServices extends ChopperService {
         ResponseReligionModel: (jsonData) => ResponseReligionModel.fromJson(jsonData),
         ResponseOrientationSexualModel: (jsonData) => ResponseOrientationSexualModel.fromJson(jsonData),
         ResponseLoginModel: (jsonData) => ResponseLoginModel.fromJson(jsonData),
+        ResponseArticlesModel: (jsonData) => ResponseArticlesModel.fromJson(jsonData),
       }),
     );
 
