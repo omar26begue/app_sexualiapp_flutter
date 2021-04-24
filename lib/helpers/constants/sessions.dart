@@ -1,7 +1,7 @@
 library sessions;
 
-const String sessionLogin = "is_login_medical";
-const String sessionIdentifier = 'identifier_medical';
-const String sessionEmail = 'email_medical';
-const String sessionName = 'name_medical';
-const String sessionToken = 'token_medical';
+const String sessionLogin = "is_login_sexualidad";
+const String sessionIdentifier = 'identifier_sexualidad';
+const String sessionEmail = 'email_sexualidad';
+const String sessionName = 'name_sexualidad';
+const String sessionToken = 'token_sexualidad';

@@ -31,6 +31,20 @@ class SessionManagerSexualidad {
     return prefs.getString(sessionIdentifier) ?? null;
   }
 
+  Future<String> getName() async {
+    Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
+
+    return prefs.getString(sessionName) ?? null;
+  }
+
+  Future<String> getEmail() async {
+    Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
+
+    return prefs.getString(sessionEmail) ?? null;
+  }
+
   void setLoginSexualidad(ResponseLoginModel token) async {
     Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     final SharedPreferences prefs = await _prefs;
@@ -38,6 +52,8 @@ class SessionManagerSexualidad {
     prefs.setBool(sessionLogin, true);
     prefs.setString(sessionIdentifier, token.identifier);
     prefs.setString(sessionToken, token.token);
+    prefs.setString(sessionName, token.name);
+    prefs.setString(sessionEmail, token.email);
   }
 
   Future<bool> clearPrefSexualidad() async {

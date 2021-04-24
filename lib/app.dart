@@ -42,6 +42,7 @@ class _AppSexualidadState extends State<AppSexualidad> {
           debugShowCheckedModeBanner: false,
           home: SplashPage(),
           routes: <String, WidgetBuilder>{
+            pageSplash: (BuildContext context) => SplashPage(),
             pageEntrace: (BuildContext context) => EntracePage(),
             pageLogin: (BuildContext context) => LoginPage(),
             pageHome: (BuildContext context) => ArticlesPage(),
