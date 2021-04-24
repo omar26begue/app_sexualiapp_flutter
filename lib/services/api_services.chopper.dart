@@ -66,4 +66,16 @@ class _$APISexualidadServices extends APISexualidadServices {
         Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
     return client.send<ResponseLoginModel, ResponseLoginModel>($request);
   }
+
+  @override
+  Future<Response<List<ResponseArticlesModel>>> getArticles(String token) {
+    final $url = '/api/v1/articles';
+    final $headers = {
+      'Authorization': token,
+      'Content-Type': 'application/json'
+    };
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    return client
+        .send<List<ResponseArticlesModel>, ResponseArticlesModel>($request);
+  }
 }

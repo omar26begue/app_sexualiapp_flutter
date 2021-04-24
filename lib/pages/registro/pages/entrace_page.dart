@@ -8,9 +8,9 @@ import 'package:provider/provider.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:sexual_app/helpers/constants/routers.dart';
 import 'package:sexual_app/helpers/response.dart';
+import 'package:sexual_app/helpers/session_manager.dart';
 import 'package:sexual_app/models/providers/model_sexual.dart';
 import 'package:sexual_app/models/retrofit/requests/facebook_request.dart';
-import 'package:sexual_app/models/retrofit/requests/register_request.dart';
 import 'package:sexual_app/services/api_services.dart';
 
 class EntracePage extends StatefulWidget {
@@ -265,7 +265,11 @@ class _EntracePageState extends State<EntracePage> {
           context: context,
           statusCode: response.statusCode,
           logger: logger,
-          functionCode: () {},
+          functionCode: () {
+            SessionManagerSexualidad().setLoginSexualidad(response.body);
+
+            Navigator.pushReplacementNamed(context, pageHome);
+          },
           error: response.error,
           executeError: () {},
         );
