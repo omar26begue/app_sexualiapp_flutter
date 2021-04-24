@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:sexual_app/helpers/loading.dart';
 import 'package:sexual_app/helpers/response.dart';
 import 'package:sexual_app/helpers/session_manager.dart';
-import 'package:sexual_app/models/retrofit/requests/login_request.dart';
 import 'package:sexual_app/models/retrofit/responses/articles_response.dart';
 import 'package:sexual_app/pages/articles/widgets/articles_widget.dart';
 import 'package:sexual_app/pages/articles/widgets/categories_widget.dart';
@@ -23,6 +22,7 @@ class ArticlesPage extends StatefulWidget {
 class _ArticlesPageState extends State<ArticlesPage> {
   bool loading = false;
   var logger = new Logger();
+  String categorisActive = '';
   List<ResponseArticlesModel> listArticles = [];
 
   @override
@@ -96,12 +96,15 @@ class _ArticlesPageState extends State<ArticlesPage> {
                   Row(
                     children: [
                       SizedBox(width: 10.0),
-                      CategoriesWidget(
-                        texto: 'Hombres',
-                        icon: 'assets/img/man.svg',
+                      InkWell(
+                        onTap: () => actionSelectCategories('man'),
+                        child: CategoriesWidget(texto: 'Hombres', icon: 'assets/img/man.svg', categories: 'man', active: categorisActive),
                       ),
                       SizedBox(width: 10.0),
-                      CategoriesWidget(texto: 'Mujeres', icon: 'assets/img/woman.svg'),
+                      InkWell(
+                        onTap: () => actionSelectCategories('woman'),
+                        child: CategoriesWidget(texto: 'Mujeres', icon: 'assets/img/woman.svg', categories: 'woman', active: categorisActive),
+                      ),
                     ],
                   ),
                   SizedBox(height: 16.0),
@@ -110,9 +113,10 @@ class _ArticlesPageState extends State<ArticlesPage> {
                       itemCount: listArticles.length,
                       itemBuilder: (context, index) {
                         return ArticlesWidget(article: listArticles[index]);
-                      }, separatorBuilder: (BuildContext context, int index) {
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
                         return SizedBox(height: 12.0);
-                    },
+                      },
                     ),
                   ),
                 ],
@@ -123,5 +127,21 @@ class _ArticlesPageState extends State<ArticlesPage> {
         ),
       ),
     );
+  }
+
+  Future<void> actionSelectCategories(String categories) async {
+    setState(() => categorisActive = categories);
+
+    await loadArticles();
+
+    List<ResponseArticlesModel> temp = [];
+
+    for (int index = 0; index < listArticles.length; index++) {
+      if (listArticles[index].category == categorisActive) {
+        temp.add(listArticles[index]);
+      }
+    }
+
+    setState(() => listArticles = temp);
   }
 }

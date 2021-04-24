@@ -5,6 +5,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:sexual_app/helpers/constants/api.dart';
 import 'package:sexual_app/models/retrofit/responses/articles_response.dart';
+import 'package:sexual_app/pages/articles/pages/articles_details_page.dart';
 import 'package:share/share.dart';
 
 // ignore: must_be_immutable
@@ -20,6 +21,8 @@ class ArticlesWidget extends StatefulWidget {
 }
 
 class _ArticlesWidgetState extends State<ArticlesWidget> {
+  bool expanded = false;
+
   @override
   void initState() {
     super.initState();
@@ -44,36 +47,61 @@ class _ArticlesWidgetState extends State<ArticlesWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Image.asset('assets/img/doctor.png', width: 51.0, height: 51.0),
+              InkWell(
+                onTap: () => actionArticlesDetails(),
+                child: Image.asset('assets/img/doctor.png', width: 51.0, height: 51.0),
+              ),
               Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.article.title,
-                      textAlign: TextAlign.start,
-                      maxLines: 1,
-                      style: TextStyle(
-                        fontFamily: 'Gibson SemiBlod',
-                        fontSize: 16.0,
-                        color: HexColor('#454F63'),
+                child: InkWell(
+                  onTap: () => actionArticlesDetails(),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.article.title,
+                        textAlign: TextAlign.start,
+                        maxLines: 1,
+                        style: TextStyle(
+                          fontFamily: 'Gibson SemiBlod',
+                          fontSize: 16.0,
+                          color: HexColor('#454F63'),
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 4.0),
-                    Text(
-                      DateFormat('EEEE, d MMM, yyyy').format(widget.article.date_article),
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontFamily: 'Gibson Regular',
-                        fontSize: 12.0,
-                        color: HexColor('#454F63'),
+                      SizedBox(height: 4.0),
+                      Text(
+                        DateFormat('EEEE, d MMM, yyyy').format(widget.article.date_article),
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontFamily: 'Gibson Regular',
+                          fontSize: 12.0,
+                          color: HexColor('#454F63'),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-              Icon(Icons.keyboard_arrow_down_outlined, color: HexColor('#78849E'), size: 24.0),
+              InkWell(
+                onTap: () => actionExpanded(),
+                child: expanded == false
+                    ? Icon(Icons.keyboard_arrow_down_outlined, color: HexColor('#78849E'), size: 24.0)
+                    : Container(
+                        decoration: BoxDecoration(
+                          color: HexColor('#6F33C7'),
+                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                        ),
+                        padding: EdgeInsets.all(10.0),
+                        child: Text(
+                          'Solicita\nasesoria',
+                          style: TextStyle(
+                            fontFamily: 'Gibson Regular',
+                            fontSize: 14.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+              ),
             ],
           ),
           SizedBox(height: 17.0),
@@ -147,5 +175,15 @@ class _ArticlesWidgetState extends State<ArticlesWidget> {
     } else {
       Share.share(widget.article.sub_title, subject: widget.article.title);
     }
+  }
+
+  void actionExpanded() {
+    setState(() => expanded = !expanded);
+  }
+
+  void actionArticlesDetails() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return ArticlesDetailsPage(article: widget.article);
+    }));
   }
 }

@@ -11,7 +11,6 @@ import 'package:sexual_app/helpers/response.dart';
 import 'package:sexual_app/helpers/session_manager.dart';
 import 'package:sexual_app/models/providers/model_sexual.dart';
 import 'package:sexual_app/models/retrofit/requests/facebook_request.dart';
-import 'package:sexual_app/models/retrofit/requests/register_request.dart';
 import 'package:sexual_app/services/api_services.dart';
 
 class EntracePage extends StatefulWidget {

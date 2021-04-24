@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 
+// ignore: must_be_immutable
 class CategoriesWidget extends StatefulWidget {
-  String texto, icon;
+  String texto, icon, categories, active;
 
-  CategoriesWidget({Key key, @required this.texto, @required this.icon}) : super(key: key);
+  CategoriesWidget({Key key, @required this.texto, @required this.icon, @required this.categories, @required this.active}) : super(key: key);
 
   @override
   _CategoriesWidgetState createState() {
@@ -30,7 +31,7 @@ class _CategoriesWidgetState extends State<CategoriesWidget> {
       width: 81.0,
       height: 71.0,
       decoration: BoxDecoration(
-        color: HexColor('#6F33C7'),
+        color: widget.categories == widget.active ? HexColor('#A5047D') :HexColor('#6F33C7'),
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
       ),
       child: Column(
