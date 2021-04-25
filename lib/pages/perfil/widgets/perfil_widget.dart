@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sexual_app/models/retrofit/responses/perfil_response.dart';
+import 'package:sexual_app/pages/pago/pages/pago_page.dart';
 import 'package:sexual_app/pages/perfil/widgets/datos_personales_widget.dart';
 
 // ignore: must_be_immutable
@@ -193,18 +194,21 @@ class _PerfilWidgetState extends State<PerfilWidget> {
                       ),
                     ],
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: HexColor('#6F33C7'),
-                      borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    child: Text(
-                      'Comprar coins',
-                      style: TextStyle(
-                        fontFamily: 'Gibson Regular',
-                        fontSize: 14.0,
-                        color: Colors.white,
+                  InkWell(
+                    onTap: () => actionPago(),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: HexColor('#6F33C7'),
+                        borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      child: Text(
+                        'Comprar coins',
+                        style: TextStyle(
+                          fontFamily: 'Gibson Regular',
+                          fontSize: 14.0,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -219,5 +223,11 @@ class _PerfilWidgetState extends State<PerfilWidget> {
 
   void actionOpciones(String pOpcion) {
     setState(() => opcion = pOpcion);
+  }
+
+  Future<void> actionPago() async {
+    await Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return PagoPage();
+    }));
   }
 }
