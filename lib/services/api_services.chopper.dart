@@ -78,4 +78,43 @@ class _$APISexualidadServices extends APISexualidadServices {
     return client
         .send<List<ResponseArticlesModel>, ResponseArticlesModel>($request);
   }
+
+  @override
+  Future<Response<ResponsePerfilModel>> getPerfil(String token) {
+    final $url = '/api/v1/users/info';
+    final $headers = {
+      'Authorization': token,
+      'Content-Type': 'application/json'
+    };
+    final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    return client.send<ResponsePerfilModel, ResponsePerfilModel>($request);
+  }
+
+  @override
+  Future<Response<ResponseAPIModel>> setUsers(
+      String token, String identifier, RequestRegisterModel users) {
+    final $url = '/api/v1/users/$identifier';
+    final $headers = {
+      'Authorization': token,
+      'Content-Type': 'application/json'
+    };
+    final $body = users;
+    final $request =
+        Request('PATCH', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<ResponseAPIModel, ResponseAPIModel>($request);
+  }
+
+  @override
+  Future<Response<ResponseAPIModel>> setImageUsers(
+      String token, RequestImageUsersModel image) {
+    final $url = '/api/v1/users/image';
+    final $headers = {
+      'Authorization': token,
+      'Content-Type': 'application/json'
+    };
+    final $body = image;
+    final $request =
+        Request('PATCH', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<ResponseAPIModel, ResponseAPIModel>($request);
+  }
 }

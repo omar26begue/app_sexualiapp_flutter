@@ -7,6 +7,7 @@ import 'package:sexual_app/helpers/loading.dart';
 import 'package:sexual_app/helpers/response.dart';
 import 'package:sexual_app/helpers/session_manager.dart';
 import 'package:sexual_app/models/retrofit/responses/articles_response.dart';
+import 'package:sexual_app/models/retrofit/responses/perfil_response.dart';
 import 'package:sexual_app/pages/articles/widgets/articles_widget.dart';
 import 'package:sexual_app/pages/articles/widgets/categories_widget.dart';
 import 'package:sexual_app/pages/articles/widgets/menu_widget.dart';
@@ -25,18 +26,43 @@ class _ArticlesPageState extends State<ArticlesPage> {
   bool loading = false;
   var logger = new Logger();
   String categorisActive = '';
+  ResponsePerfilModel perfil = new ResponsePerfilModel();
   List<ResponseArticlesModel> listArticles = [];
   GlobalKey<SliderMenuContainerState> _key = new GlobalKey<SliderMenuContainerState>();
 
   @override
   void initState() {
     super.initState();
+    getPerfil();
     loadArticles();
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  Future<void> getPerfil() async {
+    try {
+      setState(() => loading = true);
+      String token = await SessionManagerSexualidad().getToken();
+      final response = await Provider.of<APISexualidadServices>(context, listen: false).getPerfil(token);
+      setState(() => loading = false);
+
+      Response.responseMedical(
+        context: context,
+        statusCode: response.statusCode,
+        logger: logger,
+        functionCode: () {
+          setState(() => perfil = response.body);
+        },
+        error: response.error,
+        executeError: () {},
+      );
+    } catch (e) {
+      logger.e(e.toString());
+      setState(() => loading = false);
+    }
   }
 
   Future<void> loadArticles() async {
@@ -76,7 +102,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
           ),
           animationDuration: 5,
           slideDirection: SlideDirection.RIGHT_TO_LEFT,
-          sliderMenu: MenuWidget(),
+          sliderMenu: MenuWidget(perfil: perfil, functionGetPerfil: getPerfil),
           sliderMain: Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
