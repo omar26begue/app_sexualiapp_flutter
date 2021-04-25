@@ -24,7 +24,7 @@ class SessionManagerSexualidad {
     return prefs.getString(sessionToken) ?? null;
   }
 
-  Future<String> getUsers() async {
+  Future<String> getUsersIdentifier() async {
     Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     final SharedPreferences prefs = await _prefs;
 

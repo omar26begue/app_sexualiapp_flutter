@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
+import 'package:sexual_app/helpers/session_manager.dart';
+import 'package:sexual_app/models/retrofit/requests/image_users_request.dart';
 import 'package:sexual_app/pages/perfil/widgets/perfil_widget.dart';
+import 'package:sexual_app/services/api_services.dart';
 
 class PerfilPage extends StatefulWidget {
   PerfilPage({Key key}) : super(key: key);
@@ -13,9 +19,22 @@ class PerfilPage extends StatefulWidget {
 }
 
 class _PerfilPageState extends State<PerfilPage> {
+  bool imagePerfil = false, loading = false;
+  List<String> images = [];
+  var logger = new Logger();
+
   @override
   void initState() {
     super.initState();
+
+    images.add('assets/img/perfil1.png');
+    images.add('assets/img/perfil2.png');
+    images.add('assets/img/perfil3.png');
+    images.add('assets/img/perfil4.png');
+    images.add('assets/img/perfil5.png');
+    images.add('assets/img/perfil6.png');
+
+    setState(() => images = images);
   }
 
   @override
@@ -51,23 +70,51 @@ class _PerfilPageState extends State<PerfilPage> {
                       ),
                       Stack(
                         children: [
-                          Container(
-                            decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-                            padding: EdgeInsets.all(1.0),
-                            child: Image.asset('assets/img/perfil1.png', width: 82.0, height: 102.0),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: HexColor('#8452CC'),
-                                shape: BoxShape.circle,
-                              ),
-                              padding: EdgeInsets.all(6.0),
-                              child: Icon(Icons.add, color: Colors.white, size: 18.0),
-                            ),
-                          ),
+                          imagePerfil == false
+                              ? InkWell(
+                                  onTap: () => actionSelectImage(),
+                                  child: Container(
+                                    decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                                    padding: EdgeInsets.all(1.0),
+                                    child: Image.asset('assets/img/perfil1.png', width: 82.0, height: 102.0),
+                                  ),
+                                )
+                              : Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 100.0,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: images.length,
+                                    itemBuilder: (context, index) {
+                                      return Row(
+                                        children: [
+                                          SizedBox(width: 10.0),
+                                          InkWell(
+                                            onTap: () => actionSetImage(images[index]),
+                                            child: Image.asset(images[index], width: 67.0, height: 67.0),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                ),
+                          imagePerfil == false
+                              ? Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: InkWell(
+                                    onTap: () => actionSelectImage(),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: HexColor('#8452CC'),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      padding: EdgeInsets.all(6.0),
+                                      child: Icon(Icons.add, color: Colors.white, size: 18.0),
+                                    ),
+                                  ),
+                                )
+                              : SizedBox(),
                         ],
                       ),
                     ],
@@ -208,5 +255,24 @@ class _PerfilPageState extends State<PerfilPage> {
 
   void actionBack() {
     Navigator.of(context).pop();
+  }
+
+  void actionSelectImage() {
+    setState(() => imagePerfil = !imagePerfil);
+  }
+
+  Future<void> actionSetImage(String image) async {
+    try {
+      setState(() => loading = true);
+      String token = await SessionManagerSexualidad().getToken();
+      String identifier = await SessionManagerSexualidad().getUsersIdentifier();
+      RequestImageUsersModel imageR = new RequestImageUsersModel(identifier: identifier, image: image);
+      final response = await Provider.of<APISexualidadServices>(context, listen: false).setImageUsers(token, imageR);
+      setState(() => loading = false);
+
+      logger.i(response.statusCode);
+    } catch (e) {
+      logger.e(e.toString());
+    }
   }
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:chopper/chopper.dart';
 import 'package:sexual_app/helpers/constants/api.dart';
 import 'package:sexual_app/models/retrofit/requests/facebook_request.dart';
+import 'package:sexual_app/models/retrofit/requests/image_users_request.dart';
 import 'package:sexual_app/models/retrofit/requests/login_request.dart';
 import 'package:sexual_app/models/retrofit/requests/register_request.dart';
 import 'package:sexual_app/models/retrofit/responses/articles_response.dart';
@@ -34,6 +35,9 @@ abstract class APISexualidadServices extends ChopperService {
 
   @Get(headers: {'Content-Type': 'application/json'}, path: "/v1/articles")
   Future<Response<List<ResponseArticlesModel>>> getArticles(@Header("Authorization") String token);
+
+  @Patch(headers: {'Content-Type': 'application/json'}, path: "/v1/users/image")
+  Future<Response<ResponseAPIModel>> setImageUsers(@Header("Authorization") String token, @Body() RequestImageUsersModel image);
 
   static APISexualidadServices create() {
     final client = ChopperClient(
