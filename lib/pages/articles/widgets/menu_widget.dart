@@ -5,6 +5,7 @@ import 'package:sexual_app/helpers/constants/routers.dart';
 import 'package:sexual_app/helpers/dialog.dart';
 import 'package:sexual_app/helpers/session_manager.dart';
 import 'package:sexual_app/pages/articles/widgets/item_menu_widget.dart';
+import 'package:sexual_app/pages/perfil/pages/perfil_page.dart';
 
 class MenuWidget extends StatefulWidget {
   MenuWidget({Key key}) : super(key: key);
@@ -107,7 +108,10 @@ class _MenuWidgetState extends State<MenuWidget> {
                   flex: 9,
                   child: Column(
                     children: [
-                      ItemMenuWidget(name: 'Perfil', icon: 'assets/img/perfil.svg'),
+                      InkWell(
+                        onTap: () => actionPerfil(),
+                        child: ItemMenuWidget(name: 'Perfil', icon: 'assets/img/perfil.svg'),
+                      ),
                       SizedBox(height: 40.0),
                       ItemMenuWidget(name: 'Consultas', icon: 'assets/img/consultas.svg'),
                       SizedBox(height: 40.0),
@@ -135,6 +139,12 @@ class _MenuWidgetState extends State<MenuWidget> {
         ),
       ],
     );
+  }
+
+  void actionPerfil() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return PerfilPage();
+    }));
   }
 
   void actionCerrarSession() {
