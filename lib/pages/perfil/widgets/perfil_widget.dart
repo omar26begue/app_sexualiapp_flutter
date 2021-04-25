@@ -3,6 +3,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:sexual_app/models/retrofit/responses/perfil_response.dart';
 import 'package:sexual_app/pages/perfil/widgets/datos_personales_widget.dart';
 
+// ignore: must_be_immutable
 class PerfilWidget extends StatefulWidget {
   ResponsePerfilModel perfil;
 

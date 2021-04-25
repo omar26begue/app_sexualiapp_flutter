@@ -7,6 +7,7 @@ import 'package:sexual_app/models/retrofit/responses/perfil_response.dart';
 import 'package:sexual_app/pages/articles/widgets/item_menu_widget.dart';
 import 'package:sexual_app/pages/perfil/pages/perfil_page.dart';
 
+// ignore: must_be_immutable
 class MenuWidget extends StatefulWidget {
   ResponsePerfilModel perfil;
   Function functionGetPerfil;

@@ -40,6 +40,9 @@ abstract class APISexualidadServices extends ChopperService {
   @Get(headers: {'Content-Type': 'application/json'}, path: "/v1/users/info")
   Future<Response<ResponsePerfilModel>> getPerfil(@Header("Authorization") String token);
 
+  @Patch(headers: {'Content-Type': 'application/json'}, path: "/v1/users/{id}")
+  Future<Response<ResponseAPIModel>> setUsers(@Header("Authorization") String token, @Path("id") String identifier, @Body() RequestRegisterModel users);
+
   @Patch(headers: {'Content-Type': 'application/json'}, path: "/v1/users/image")
   Future<Response<ResponseAPIModel>> setImageUsers(@Header("Authorization") String token, @Body() RequestImageUsersModel image);
 

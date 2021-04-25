@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sexual_app/models/retrofit/responses/perfil_response.dart';
 
+// ignore: must_be_immutable
 class DatosPersonalesWidget extends StatefulWidget {
   ResponsePerfilModel perfil;
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 
+// ignore: must_be_immutable
 class ItemMenuWidget extends StatefulWidget {
   String icon, name;
 

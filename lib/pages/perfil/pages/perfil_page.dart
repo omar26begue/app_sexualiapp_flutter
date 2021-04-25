@@ -8,6 +8,7 @@ import 'package:sexual_app/helpers/response.dart';
 import 'package:sexual_app/helpers/session_manager.dart';
 import 'package:sexual_app/models/retrofit/requests/image_users_request.dart';
 import 'package:sexual_app/models/retrofit/responses/perfil_response.dart';
+import 'package:sexual_app/pages/perfil/widgets/edit_perfil_widget.dart';
 import 'package:sexual_app/pages/perfil/widgets/perfil_widget.dart';
 import 'package:sexual_app/services/api_services.dart';
 
@@ -21,7 +22,7 @@ class PerfilPage extends StatefulWidget {
 }
 
 class _PerfilPageState extends State<PerfilPage> {
-  bool imagePerfil = false, loading = false;
+  bool imagePerfil = false, loading = false, editPerfil = false;
   List<String> images = [];
   var logger = new Logger();
   ResponsePerfilModel perfil = new ResponsePerfilModel(name: '', age: 0, email: '');
@@ -191,18 +192,21 @@ class _PerfilPageState extends State<PerfilPage> {
                                       ],
                                     ),
                                   ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: HexColor('#6F33C7'),
-                                      borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                                    ),
-                                    padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
-                                    child: Text(
-                                      'Editar perfil',
-                                      style: TextStyle(
-                                        fontFamily: 'Gibson Regular',
-                                        fontSize: 14.0,
-                                        color: Colors.white,
+                                  InkWell(
+                                    onTap: () => actionEditPerfil(),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: HexColor('#6F33C7'),
+                                        borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                                      ),
+                                      padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+                                      child: Text(
+                                        editPerfil == false ? 'Editar perfil' : 'Cancelar edición',
+                                        style: TextStyle(
+                                          fontFamily: 'Gibson Regular',
+                                          fontSize: 14.0,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -212,66 +216,72 @@ class _PerfilPageState extends State<PerfilPage> {
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 12.0),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            ),
-                            padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: HexColor('#6F33C7'),
-                                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                                  ),
-                                  padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-                                  child: Text(
-                                    'Hacer una pregunta',
-                                    style: TextStyle(
-                                      fontFamily: 'Gibson Regular',
-                                      fontSize: 14.0,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                Column(
-                                  children: [
-                                    SvgPicture.asset('assets/img/chat.svg', width: 24.0, height: 24.0),
-                                    Text(
-                                      'Chat',
-                                      style: TextStyle(
-                                        fontFamily: 'Gibson Regular',
-                                        fontSize: 13.0,
-                                        color: HexColor('#78849E'),
+                        editPerfil == false
+                            ? Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 12.0),
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                      ),
+                                      padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: HexColor('#6F33C7'),
+                                              borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                                            ),
+                                            padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                                            child: Text(
+                                              'Hacer una pregunta',
+                                              style: TextStyle(
+                                                fontFamily: 'Gibson Regular',
+                                                fontSize: 14.0,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                          Column(
+                                            children: [
+                                              SvgPicture.asset('assets/img/chat.svg', width: 24.0, height: 24.0),
+                                              Text(
+                                                'Chat',
+                                                style: TextStyle(
+                                                  fontFamily: 'Gibson Regular',
+                                                  fontSize: 13.0,
+                                                  color: HexColor('#78849E'),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Column(
+                                            children: [
+                                              SvgPicture.asset('assets/img/email_blue.svg', width: 24.0, height: 18.0),
+                                              SizedBox(height: 3.5),
+                                              Text(
+                                                'Email',
+                                                style: TextStyle(
+                                                  fontFamily: 'Gibson Regular',
+                                                  fontSize: 13.0,
+                                                  color: HexColor('#78849E'),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    SvgPicture.asset('assets/img/email_blue.svg', width: 24.0, height: 18.0),
-                                    SizedBox(height: 3.5),
-                                    Text(
-                                      'Email',
-                                      style: TextStyle(
-                                        fontFamily: 'Gibson Regular',
-                                        fontSize: 13.0,
-                                        color: HexColor('#78849E'),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 23.0),
-                        PerfilWidget(perfil: perfil),
+                                  ),
+                                  SizedBox(height: 23.0),
+                                  PerfilWidget(perfil: perfil),
+                                ],
+                              )
+                            : EditPerfilWidget(perfil: perfil, functionActionEditPerfil: actionEditPerfil),
                       ],
                     ),
                   ),
@@ -317,5 +327,9 @@ class _PerfilPageState extends State<PerfilPage> {
     } catch (e) {
       logger.e(e.toString());
     }
+  }
+
+  void actionEditPerfil() {
+    setState(() => editPerfil = !editPerfil);
   }
 }

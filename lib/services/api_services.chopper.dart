@@ -91,6 +91,20 @@ class _$APISexualidadServices extends APISexualidadServices {
   }
 
   @override
+  Future<Response<ResponseAPIModel>> setUsers(
+      String token, String identifier, RequestRegisterModel users) {
+    final $url = '/api/v1/users/$identifier';
+    final $headers = {
+      'Authorization': token,
+      'Content-Type': 'application/json'
+    };
+    final $body = users;
+    final $request =
+        Request('PATCH', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<ResponseAPIModel, ResponseAPIModel>($request);
+  }
+
+  @override
   Future<Response<ResponseAPIModel>> setImageUsers(
       String token, RequestImageUsersModel image) {
     final $url = '/api/v1/users/image';
