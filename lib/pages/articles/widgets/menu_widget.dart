@@ -5,12 +5,14 @@ import 'package:sexual_app/helpers/dialog.dart';
 import 'package:sexual_app/helpers/session_manager.dart';
 import 'package:sexual_app/models/retrofit/responses/perfil_response.dart';
 import 'package:sexual_app/pages/articles/widgets/item_menu_widget.dart';
+import 'package:sexual_app/pages/pago/pages/pago_page.dart';
 import 'package:sexual_app/pages/perfil/pages/perfil_page.dart';
 
 // ignore: must_be_immutable
 class MenuWidget extends StatefulWidget {
   ResponsePerfilModel perfil;
   Function functionGetPerfil;
+
   MenuWidget({Key key, @required this.perfil, @required this.functionGetPerfil}) : super(key: key);
 
   @override
@@ -118,7 +120,10 @@ class _MenuWidgetState extends State<MenuWidget> {
                       SizedBox(height: 40.0),
                       ItemMenuWidget(name: 'Consultas', icon: 'assets/img/consultas.svg'),
                       SizedBox(height: 40.0),
-                      ItemMenuWidget(name: 'Pagos', icon: 'assets/img/pagos.svg'),
+                      InkWell(
+                        onTap: () => actionPago(),
+                        child: ItemMenuWidget(name: 'Pagos', icon: 'assets/img/pagos.svg'),
+                      ),
                       SizedBox(height: 40.0),
                       ItemMenuWidget(name: 'Sobre la app', icon: 'assets/img/app.svg'),
                       SizedBox(height: 40.0),
@@ -161,5 +166,11 @@ class _MenuWidgetState extends State<MenuWidget> {
         Navigator.pushReplacementNamed(context, pageSplash);
       },
     );
+  }
+
+  Future<void> actionPago() async {
+    await Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return PagoPage();
+    }));
   }
 }
