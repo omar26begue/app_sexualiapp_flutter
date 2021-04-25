@@ -9,6 +9,7 @@ import 'package:sexual_app/models/retrofit/requests/register_request.dart';
 import 'package:sexual_app/models/retrofit/responses/articles_response.dart';
 import 'package:sexual_app/models/retrofit/responses/login_response.dart';
 import 'package:sexual_app/models/retrofit/responses/orientation_sexual_response.dart';
+import 'package:sexual_app/models/retrofit/responses/perfil_response.dart';
 import 'package:sexual_app/models/retrofit/responses/religion_response.dart';
 import 'package:sexual_app/models/retrofit/responses/response_api.dart';
 
@@ -36,6 +37,9 @@ abstract class APISexualidadServices extends ChopperService {
   @Get(headers: {'Content-Type': 'application/json'}, path: "/v1/articles")
   Future<Response<List<ResponseArticlesModel>>> getArticles(@Header("Authorization") String token);
 
+  @Get(headers: {'Content-Type': 'application/json'}, path: "/v1/users/info")
+  Future<Response<ResponsePerfilModel>> getPerfil(@Header("Authorization") String token);
+
   @Patch(headers: {'Content-Type': 'application/json'}, path: "/v1/users/image")
   Future<Response<ResponseAPIModel>> setImageUsers(@Header("Authorization") String token, @Body() RequestImageUsersModel image);
 
@@ -49,6 +53,7 @@ abstract class APISexualidadServices extends ChopperService {
         ResponseOrientationSexualModel: (jsonData) => ResponseOrientationSexualModel.fromJson(jsonData),
         ResponseLoginModel: (jsonData) => ResponseLoginModel.fromJson(jsonData),
         ResponseArticlesModel: (jsonData) => ResponseArticlesModel.fromJson(jsonData),
+        ResponsePerfilModel: (jsonData) => ResponsePerfilModel.fromJson(jsonData),
       }),
     );
 

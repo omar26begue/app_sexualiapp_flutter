@@ -4,8 +4,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+import 'package:sexual_app/helpers/response.dart';
 import 'package:sexual_app/helpers/session_manager.dart';
 import 'package:sexual_app/models/retrofit/requests/image_users_request.dart';
+import 'package:sexual_app/models/retrofit/responses/perfil_response.dart';
 import 'package:sexual_app/pages/perfil/widgets/perfil_widget.dart';
 import 'package:sexual_app/services/api_services.dart';
 
@@ -22,6 +24,7 @@ class _PerfilPageState extends State<PerfilPage> {
   bool imagePerfil = false, loading = false;
   List<String> images = [];
   var logger = new Logger();
+  ResponsePerfilModel perfil = new ResponsePerfilModel(name: '', age: 0, email: '');
 
   @override
   void initState() {
@@ -35,11 +38,36 @@ class _PerfilPageState extends State<PerfilPage> {
     images.add('assets/img/perfil6.png');
 
     setState(() => images = images);
+
+    getPerfil();
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  Future<void> getPerfil() async {
+    try {
+      setState(() => loading = true);
+      String token = await SessionManagerSexualidad().getToken();
+      final response = await Provider.of<APISexualidadServices>(context, listen: false).getPerfil(token);
+      setState(() => loading = false);
+
+      Response.responseMedical(
+        context: context,
+        statusCode: response.statusCode,
+        logger: logger,
+        functionCode: () {
+          setState(() => perfil = response.body);
+        },
+        error: response.error,
+        executeError: () {},
+      );
+    } catch (e) {
+      logger.e(e.toString());
+      setState(() => loading = false);
+    }
   }
 
   @override
@@ -76,7 +104,7 @@ class _PerfilPageState extends State<PerfilPage> {
                                   child: Container(
                                     decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
                                     padding: EdgeInsets.all(1.0),
-                                    child: Image.asset('assets/img/perfil1.png', width: 82.0, height: 102.0),
+                                    child: Image.asset(perfil.image == null ? 'assets/img/perfil1.png' : perfil.image, width: 82.0, height: 102.0),
                                   ),
                                 )
                               : Container(
@@ -138,27 +166,30 @@ class _PerfilPageState extends State<PerfilPage> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Pablo Shown',
-                                        style: TextStyle(
-                                          fontFamily: 'Quicksand Blod',
-                                          fontSize: 24.0,
-                                          color: HexColor('#454F63'),
+                                  Flexible(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          perfil.name,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            fontFamily: 'Quicksand Blod',
+                                            fontSize: 24.0,
+                                            color: HexColor('#454F63'),
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        '21 años',
-                                        style: TextStyle(
-                                          fontFamily: 'Gibson Regular',
-                                          fontSize: 14.0,
-                                          color: HexColor('#78849E'),
+                                        Text(
+                                          perfil.age == null ? 'Edad sin definir' : perfil.age.toString() + ' años',
+                                          style: TextStyle(
+                                            fontFamily: 'Gibson Regular',
+                                            fontSize: 14.0,
+                                            color: HexColor('#78849E'),
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                   Container(
                                     decoration: BoxDecoration(
@@ -240,7 +271,7 @@ class _PerfilPageState extends State<PerfilPage> {
                           ),
                         ),
                         SizedBox(height: 23.0),
-                        PerfilWidget(),
+                        PerfilWidget(perfil: perfil),
                       ],
                     ),
                   ),
@@ -270,7 +301,19 @@ class _PerfilPageState extends State<PerfilPage> {
       final response = await Provider.of<APISexualidadServices>(context, listen: false).setImageUsers(token, imageR);
       setState(() => loading = false);
 
-      logger.i(response.statusCode);
+      Response.responseMedical(
+        context: context,
+        statusCode: response.statusCode,
+        logger: logger,
+        functionCode: () {
+          setState(() {
+            imagePerfil = !imagePerfil;
+            perfil.image = image;
+          });
+        },
+        error: response.error,
+        executeError: () {},
+      );
     } catch (e) {
       logger.e(e.toString());
     }

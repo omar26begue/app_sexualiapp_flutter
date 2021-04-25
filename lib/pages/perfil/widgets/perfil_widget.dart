@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:sexual_app/models/retrofit/responses/perfil_response.dart';
 import 'package:sexual_app/pages/perfil/widgets/datos_personales_widget.dart';
 
 class PerfilWidget extends StatefulWidget {
-  PerfilWidget({Key key}) : super(key: key);
+  ResponsePerfilModel perfil;
+
+  PerfilWidget({Key key, @required this.perfil}) : super(key: key);
 
   @override
   _PerfilWidgetState createState() {
@@ -160,7 +163,7 @@ class _PerfilWidgetState extends State<PerfilWidget> {
         SizedBox(height: 21.0),
         opcion == 'datos' ? Column(
           children: [
-            DatosPersonalesWidget(),
+            DatosPersonalesWidget(perfil: widget.perfil),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 12.0),
               child: Row(
@@ -179,7 +182,7 @@ class _PerfilWidgetState extends State<PerfilWidget> {
                       ),
                       Image.asset('assets/img/coins.png', width: 24.0, height: 24.0),
                       Text(
-                        '0',
+                        widget.perfil.coins == null ? '0' : widget.perfil.coins.toString(),
                         textAlign: TextAlign.start,
                         style: TextStyle(
                           fontFamily: 'Gibson Regular',

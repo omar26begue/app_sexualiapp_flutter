@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sexual_app/helpers/constants/routers.dart';
 import 'package:sexual_app/helpers/dialog.dart';
 import 'package:sexual_app/helpers/session_manager.dart';
+import 'package:sexual_app/models/retrofit/responses/perfil_response.dart';
 import 'package:sexual_app/pages/articles/widgets/item_menu_widget.dart';
 import 'package:sexual_app/pages/perfil/pages/perfil_page.dart';
 
 class MenuWidget extends StatefulWidget {
-  MenuWidget({Key key}) : super(key: key);
+  ResponsePerfilModel perfil;
+  Function functionGetPerfil;
+  MenuWidget({Key key, @required this.perfil, @required this.functionGetPerfil}) : super(key: key);
 
   @override
   _MenuWidgetState createState() {
@@ -60,7 +62,7 @@ class _MenuWidgetState extends State<MenuWidget> {
                     shape: BoxShape.circle,
                   ),
                   padding: EdgeInsets.all(1.0),
-                  child: Image.asset('assets/img/perfil1.png', width: 97.0, height: 97.0),
+                  child: Image.asset(widget.perfil.image == null ? 'assets/img/perfil1.png' : widget.perfil.image, width: 97.0, height: 97.0),
                 ),
                 SizedBox(height: 20.0),
                 Padding(
@@ -141,10 +143,12 @@ class _MenuWidgetState extends State<MenuWidget> {
     );
   }
 
-  void actionPerfil() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
+  Future<void> actionPerfil() async {
+    await Navigator.push(context, MaterialPageRoute(builder: (context) {
       return PerfilPage();
     }));
+
+    widget.functionGetPerfil();
   }
 
   void actionCerrarSession() {

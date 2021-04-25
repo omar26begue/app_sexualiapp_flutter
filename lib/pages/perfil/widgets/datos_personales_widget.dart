@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:sexual_app/models/retrofit/responses/perfil_response.dart';
 
 class DatosPersonalesWidget extends StatefulWidget {
-  DatosPersonalesWidget({Key key}) : super(key: key);
+  ResponsePerfilModel perfil;
+
+  DatosPersonalesWidget({Key key, @required this.perfil}) : super(key: key);
 
   @override
   _DatosPersonalesWidgetState createState() {
@@ -50,7 +52,7 @@ class _DatosPersonalesWidgetState extends State<DatosPersonalesWidget> {
                 Row(
                   children: [
                     Text(
-                      'Nombre: ',
+                      'Nombre: ' + widget.perfil.name,
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontFamily: 'Gibson Regular',
@@ -64,7 +66,7 @@ class _DatosPersonalesWidgetState extends State<DatosPersonalesWidget> {
                 Row(
                   children: [
                     Text(
-                      'Edad: ',
+                      'Edad: ' + (widget.perfil.age == null ? '-' : widget.perfil.age.toString() + ' años'),
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontFamily: 'Gibson Regular',
@@ -78,7 +80,7 @@ class _DatosPersonalesWidgetState extends State<DatosPersonalesWidget> {
                 Row(
                   children: [
                     Text(
-                      'Sexo: ',
+                      'Sexo: ' + (widget.perfil.sex == null ? '-' : widget.perfil.sex),
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontFamily: 'Gibson Regular',
@@ -92,7 +94,7 @@ class _DatosPersonalesWidgetState extends State<DatosPersonalesWidget> {
                 Row(
                   children: [
                     Text(
-                      'Religión: ',
+                      'Religión: ' + (widget.perfil.name_religion == null ? '-' : widget.perfil.name_religion),
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontFamily: 'Gibson Regular',
@@ -106,7 +108,7 @@ class _DatosPersonalesWidgetState extends State<DatosPersonalesWidget> {
                 Row(
                   children: [
                     Text(
-                      'Orientación sexual: ',
+                      'Orientación sexual: ' + (widget.perfil.name_sexual_orientation == null ? '-' : widget.perfil.name_sexual_orientation),
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontFamily: 'Gibson Regular',
@@ -120,7 +122,7 @@ class _DatosPersonalesWidgetState extends State<DatosPersonalesWidget> {
                 Row(
                   children: [
                     Text(
-                      'Email: ',
+                      'Email: ' + widget.perfil.email,
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontFamily: 'Gibson Regular',
