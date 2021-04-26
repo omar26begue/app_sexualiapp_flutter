@@ -30,6 +30,7 @@ dependencies:
   intl: ^0.17.0
   share: ^2.0.1
   flutter_slider_drawer: ^2.0.0
+  socket_io_client: ^0.9.12
 
 dev_dependencies:
   flutter_test:

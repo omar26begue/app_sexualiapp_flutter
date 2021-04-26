@@ -5,7 +5,9 @@ part 'articles_response.g.dart';
 @JsonSerializable()
 class ResponseArticlesModel {
   // ignore: non_constant_identifier_names
-  String identifier, title, category, image_article, image_sub_title, sub_title, text_article, doctor_article;
+  String identifier, title, category, image_article, image_sub_title, sub_title, text_article;
+  // ignore: non_constant_identifier_names
+  String doctor_article;
 
   // ignore: non_constant_identifier_names
   DateTime date_article;

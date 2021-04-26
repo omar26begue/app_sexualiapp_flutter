@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:sexual_app/models/retrofit/responses/articles_response.dart';
 import 'package:sexual_app/pages/articles/widgets/categories_widget.dart';
+import 'package:sexual_app/pages/perfil/pages/perfil_doctor_page.dart';
 
 // ignore: must_be_immutable
 class ArticlesDetailsPage extends StatefulWidget {
@@ -18,6 +20,7 @@ class ArticlesDetailsPage extends StatefulWidget {
 
 class _ArticlesDetailsPageState extends State<ArticlesDetailsPage> {
   bool expanded = false;
+  var logger = new Logger();
 
   @override
   void initState() {
@@ -74,40 +77,43 @@ class _ArticlesDetailsPageState extends State<ArticlesDetailsPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Row(
-                                children: [
-                                  Image.asset('assets/img/doctor.png', width: 51.0, height: 51.0),
-                                  Column(
+                              Flexible(
+                                child: InkWell(
+                                  onTap: () => actionPerfilDoctor(),
+                                  child: Row(
                                     children: [
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            widget.article.doctor_article,
-                                            textAlign: TextAlign.start,
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                              fontFamily: 'Gibson SemiBlod',
-                                              fontSize: 16.0,
-                                              color: HexColor('#454F63'),
+                                      Image.asset('assets/img/doctor.png', width: 51.0, height: 51.0),
+                                      Flexible(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              widget.article.doctor_article,
+                                              textAlign: TextAlign.start,
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                fontFamily: 'Gibson SemiBlod',
+                                                fontSize: 16.0,
+                                                color: HexColor('#454F63'),
+                                              ),
                                             ),
-                                          ),
-                                          SizedBox(height: 4.0),
-                                          Text(
-                                            DateFormat('EEEE, d MMM, yyyy').format(widget.article.date_article),
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                              fontFamily: 'Gibson Regular',
-                                              fontSize: 12.0,
-                                              color: HexColor('#454F63'),
+                                            SizedBox(height: 4.0),
+                                            Text(
+                                              DateFormat('EEEE, d MMM, yyyy').format(widget.article.date_article),
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                fontFamily: 'Gibson Regular',
+                                                fontSize: 12.0,
+                                                color: HexColor('#454F63'),
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      )
+                                          ],
+                                        ),
+                                      ),
                                     ],
                                   ),
-                                ],
+                                ),
                               ),
                               CategoriesWidget(texto: 'Hombres', icon: 'assets/img/man.svg', categories: 'man', active: 'man'),
                             ],
@@ -253,5 +259,11 @@ class _ArticlesDetailsPageState extends State<ArticlesDetailsPage> {
 
   void actionExpandedAsesoria() {
     setState(() => expanded = !expanded);
+  }
+
+  Future<void> actionPerfilDoctor() async {
+    await Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return PerfilDoctorPage();
+    }));
   }
 }

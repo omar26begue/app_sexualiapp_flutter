@@ -1,11 +1,17 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+import 'package:sexual_app/helpers/constants/api.dart';
 import 'package:sexual_app/helpers/loading.dart';
 import 'package:sexual_app/helpers/response.dart';
 import 'package:sexual_app/helpers/session_manager.dart';
+import 'package:sexual_app/models/model/chats_model.dart';
+import 'package:sexual_app/models/model/online_model.dart';
 import 'package:sexual_app/models/retrofit/responses/articles_response.dart';
 import 'package:sexual_app/models/retrofit/responses/perfil_response.dart';
 import 'package:sexual_app/pages/articles/widgets/articles_widget.dart';
@@ -53,8 +59,17 @@ class _ArticlesPageState extends State<ArticlesPage> {
         context: context,
         statusCode: response.statusCode,
         logger: logger,
-        functionCode: () {
+        functionCode: () async {
           setState(() => perfil = response.body);
+
+          /// websocket
+          var socket = await WebSocket.connect('ws://' + Host + ':' + Port + '/ws/online');
+          String identifier = await SessionManagerSexualidad().getUsersIdentifier();
+          OnlineModel online = new OnlineModel(identifier: identifier);
+          socket.add(jsonEncode(online));
+          socket.listen((event) {
+            print(event.toString());
+          });
         },
         error: response.error,
         executeError: () {},
